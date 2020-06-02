@@ -3,11 +3,20 @@ from flask import Flask
 
 app = Flask(__name__)
 
-app.config['DEBUG'] = True
 
 @app.route('/')
 def index():
-    return '<h1>Hello Wrold, just checking out</h1>'
+    return '<h1>To send a message use /USERNAME/MESSAGE</h1>'
 
 
-app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')))
+@app.route('/<username>')
+def username(username):
+    return "<h3>Hello there " + username + " !</h3>"
+
+@app.route('/<username>/<message>')
+def send_message(username, message):
+    return "{0}: {1}".format(username, message)
+
+app.run(host=os.getenv('IP'), 
+        port=int(os.getenv('PORT')),
+        debug=True)
