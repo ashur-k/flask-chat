@@ -1,5 +1,6 @@
 import os
-from flask import Flask, redirect
+from datetime import datetime
+from flask import Flask, redirect, render_template
 
 app = Flask(__name__)
 messages = []
@@ -7,7 +8,8 @@ messages = []
     #Add messages to the messages list
 def add_messages(username, message):
     """Add messages to the `messages` list"""
-    messages.append("{}: {}".format(username, message))
+    now = datetime.now().strftime("%H:%M:%S")
+    messages.append("({}){}: {}".format(now, username, message))
 
 def get_all_messages():
     #Get all of the messages and separate them with a br
@@ -17,12 +19,13 @@ def get_all_messages():
 @app.route('/')
 def index():
     #main page with instructions
-    return '<h1>To send a message use /USERNAME/MESSAGE</h1>'
+    return render_template('index.html')
 
 
 @app.route('/<username>')
 def user(username):
     #display chat messages
+    print(datetime.now().time())
     return "<h1>Welcome, {0}:-</h1>{1}".format(username, get_all_messages())
 
 
